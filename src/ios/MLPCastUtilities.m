@@ -10,7 +10,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
 
 + (GCKMediaInformation *)buildMediaInformation:(NSString *)contentUrl customData:(id )customData contentType:(NSString *)contentType duration:(double)duration streamType:(NSString *)streamType startTime:(double)startTime metaData:(NSDictionary *)metaData textTrackStyle:(NSDictionary *)textTrackStyle {
     NSURL* url = [NSURL URLWithString:contentUrl];
-    
+
     GCKMediaInformationBuilder* mediaInfoBuilder = [[GCKMediaInformationBuilder alloc] initWithContentURL:url];
     mediaInfoBuilder.contentID = contentUrl;
     mediaInfoBuilder.customData = customData;
@@ -26,7 +26,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
     mediaInfoBuilder.startAbsoluteTime = startTime;
     mediaInfoBuilder.metadata = [MLPCastUtilities buildMediaMetadata:metaData];
     mediaInfoBuilder.textTrackStyle = [MLPCastUtilities buildTextTrackStyle:textTrackStyle];
-    
+
     return [mediaInfoBuilder build];
 }
 
@@ -34,42 +34,42 @@ NSDictionary* queueOrderIDsByItemId = nil;
     NSDictionary *media = item[@"media"];
     double startTime = [item[@"startTime"] doubleValue];
     double duration = media[@"duration"] == [NSNull null] ? 0 : [media[@"duration"] doubleValue];
-    
+
     GCKMediaQueueItemBuilder *queueItemBuilder = [[GCKMediaQueueItemBuilder alloc] init];
     queueItemBuilder.activeTrackIDs = item[@"activeTrackIds"];
     queueItemBuilder.autoplay = [item[@"autoplay"] boolValue];
     queueItemBuilder.customData = item[@"customData"];
     queueItemBuilder.startTime = startTime;
     queueItemBuilder.preloadTime = [item[@"preloadTime"] doubleValue];
-    
+
     queueItemBuilder.mediaInformation = [MLPCastUtilities buildMediaInformation:media[@"contentId"] customData:media[@"customData"] contentType:media[@"contentType"] duration:duration streamType:media[@"streamType"] startTime:startTime metaData:media[@"metadata"] textTrackStyle:item[@"textTrackStyle"]];
-    
+
     return [queueItemBuilder build];
 }
 
 + (GCKMediaTextTrackStyle *)buildTextTrackStyle:(NSDictionary *)data {
     NSError *error = nil;
     GCKMediaTextTrackStyle* mediaTextTrackStyle = [GCKMediaTextTrackStyle createDefault];
-    
+
     if (error == nil) {
         NSString* bkgColor = data[@"backgroundColor"];
         if (bkgColor != nil) {
             mediaTextTrackStyle.backgroundColor = [[GCKColor alloc] initWithCSSString:bkgColor];
-            
+
         }
-        
+
         NSObject* customData = data[@"customData"];
         if (bkgColor != nil) {
             mediaTextTrackStyle.customData = customData;
-            
+
         }
-        
+
         NSString* edgeColor = data[@"edgeColor"];
         if (edgeColor != nil) {
             mediaTextTrackStyle.edgeColor = [[GCKColor alloc] initWithCSSString:edgeColor];
-            
+
         }
-        
+
         NSString* edgeType = data[@"edgeType"];
         if (edgeType != nil) {
             mediaTextTrackStyle.edgeType = [MLPCastUtilities parseEdgeType:edgeType];
@@ -79,12 +79,12 @@ NSDictionary* queueOrderIDsByItemId = nil;
         if (fontFamily != nil) {
             mediaTextTrackStyle.fontFamily = fontFamily;
         }
-        
+
         NSString* fontGenericFamily = data[@"fontGenericFamily"];
         if (fontGenericFamily != nil) {
             mediaTextTrackStyle.fontGenericFamily = [MLPCastUtilities parseFontGenericFamily:fontGenericFamily];
         }
-        
+
         CGFloat fontScale = (CGFloat)[data[@"fontScale"] floatValue];
         if (fontScale != 0) {
             mediaTextTrackStyle.fontScale = fontScale;
@@ -98,17 +98,17 @@ NSDictionary* queueOrderIDsByItemId = nil;
         if (fontFamily != nil) {
             mediaTextTrackStyle.foregroundColor = [[GCKColor alloc] initWithCSSString:foregroundColor];
         }
-        
+
         NSString* windowColor = data[@"windowColor"];
         if (windowColor != nil) {
             mediaTextTrackStyle.windowColor = [[GCKColor alloc] initWithCSSString:windowColor];
         }
-        
+
         CGFloat wRoundedCorner = (CGFloat)[data[@"windowRoundedCornerRadius"] floatValue];
         if (wRoundedCorner != 0) {
             mediaTextTrackStyle.windowRoundedCornerRadius = wRoundedCorner;
         }
-        
+
         NSString* windowType = data[@"windowType"];
         if (windowType != nil) {
             mediaTextTrackStyle.windowType = [MLPCastUtilities parseWindowType:windowType];
@@ -122,7 +122,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
         return nil;
     }
     GCKMediaMetadata* mediaMetaData = [[GCKMediaMetadata alloc] initWithMetadataType:GCKMediaMetadataTypeGeneric];
-    
+
     if (data[@"metadataType"]) {
         int metadataType = [data[@"metadataType"] intValue];
         mediaMetaData = [[GCKMediaMetadata alloc] initWithMetadataType:metadataType];
@@ -134,7 +134,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
             [mediaMetaData addImage:image];
         }
     }
-    
+
     NSArray* keys = data.allKeys;
     for (NSString* key in keys) {
         if ([key isEqualToString:@"metadataType"] || [key isEqualToString:@"images"] || [key isEqualToString:@"type"]) {
@@ -177,7 +177,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
             [mediaMetaData setString:data[key] forKey:convertedKey];
         }
     }
-    
+
     return mediaMetaData;
 }
 
@@ -384,7 +384,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
     if ([iOSName isEqualToString:kGCKMetadataKeyComposer]) {
         return @"composer";
     }
-    
+
     if ([iOSName isEqualToString:kGCKMetadataKeyCreationDate]) {
         return @"creationDate";
     }
@@ -449,7 +449,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
 }
 + (NSArray<GCKImage *> *)getMetadataImages:(NSArray *)imagesRaw {
     NSMutableArray<GCKImage*>* images = [NSMutableArray new];
-    
+
     for (NSDictionary* dict in imagesRaw) {
         NSString* urlString = dict[@"url"];
         NSURL* url = [NSURL URLWithString:urlString];
@@ -463,7 +463,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
         }
         [images addObject:[[GCKImage alloc] initWithURL:url width:width height:height]];
     }
-    
+
     return images;
 }
 
@@ -486,14 +486,14 @@ NSDictionary* queueOrderIDsByItemId = nil;
         }
     };
     sessionOut[@"status"] = ![status isEqual: @""]? status : [MLPCastUtilities getConnectionStatus:session.connectionState];
-    
+
     NSMutableArray<NSDictionary*>* mediaArray = [[NSMutableArray alloc] init];
     NSDictionary* mediaObj = [MLPCastUtilities createMediaObject:session];
     if (![mediaObj  isEqual: @{}]) {
         [mediaArray addObject:mediaObj];
     }
     sessionOut[@"media"] = mediaArray;
-    
+
     return sessionOut;
 }
 
@@ -509,12 +509,12 @@ NSDictionary* queueOrderIDsByItemId = nil;
     if (session.remoteMediaClient == nil) {
         return @{};
     }
-    
+
     GCKMediaStatus* mediaStatus = session.remoteMediaClient.mediaStatus;
     if (mediaStatus == nil) {
         return @{};
     }
-    
+
     NSMutableArray *qItems = [[NSMutableArray alloc] init];
     GCKMediaQueueItem* item;
     int orderID;
@@ -524,7 +524,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
         NSDictionary *qItem = [MLPCastUtilities createQueueItem: item orderID:orderID];
         [qItems addObject:qItem];
     }
-    
+
     NSMutableDictionary* mediaOut = [[NSMutableDictionary alloc] init];
     mediaOut[@"activeTrackIds"] = mediaStatus.activeTrackIDs? mediaStatus.activeTrackIDs : @[];
     mediaOut[@"currentItemId"] = @(mediaStatus.currentItemID);
@@ -545,11 +545,11 @@ NSDictionary* queueOrderIDsByItemId = nil;
         @"level" : @(mediaStatus.volume),
         @"muted" : @(mediaStatus.isMuted),
     };
-    
+
     if ([MLPCastUtilities getIdleReason:mediaStatus.idleReason]) {
         mediaOut[@"idleReason"] = [MLPCastUtilities getIdleReason:mediaStatus.idleReason];
     }
-    
+
     return [NSDictionary dictionaryWithDictionary:mediaOut];
 }
 
@@ -583,7 +583,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
     if (mediaInfo == nil) {
         return @{};
     }
-    
+
     NSMutableDictionary* returnDict = [[NSMutableDictionary alloc] init];
     returnDict[@"contentId"] = mediaInfo.contentID? mediaInfo.contentID : mediaInfo.contentURL.absoluteString;
     returnDict[@"contentType"] = mediaInfo.contentType;
@@ -608,7 +608,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
     outputDict[@"images"] = [MLPCastUtilities createImagesArray:metadata.images];
     outputDict[@"metadataType"] = @(metadata.metadataType);
     outputDict[@"type"] = @(metadata.metadataType);
-    
+
     for (NSString* key in keys) {
         NSString* outKey = [MLPCastUtilities getClientMetadataName:key];
         if ([outKey isEqualToString:key] || [outKey isEqualToString:@"type"]) {
@@ -646,7 +646,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
 
 + (NSArray*)createImagesArray:(NSArray<GCKImage*>*) images {
     NSMutableArray* appImages = [NSMutableArray new];
-    
+
     for (GCKImage* image in images) {
         NSMutableDictionary* imgDict = [NSMutableDictionary new];
         imgDict[@"url"] = image.URL.absoluteString;
@@ -676,24 +676,24 @@ NSDictionary* queueOrderIDsByItemId = nil;
 
 + (NSArray<NSDictionary *> *)getMediaTracks:(NSArray<GCKMediaTrack *> *)mediaTracks {
     NSMutableArray<NSDictionary*>* tracks = [NSMutableArray new];
-    
+
     if (mediaTracks == nil) {
         return tracks;
     }
-    
-//    for (GCKMediaTrack* mediaTrack in mediaTracks) {
-//        NSDictionary* track = @{
-//            @"trackId": @(mediaTrack.identifier),
-//            @"customData": mediaTrack.customData == nil? @{} : mediaTrack.customData,
-//            @"language": mediaTrack.languageCode == nil? @"" : mediaTrack.languageCode,
-//            @"name": mediaTrack.name == nil? @"" : mediaTrack.name,
-//            @"subtype": [MLPCastUtilities getTextTrackSubtype:mediaTrack.textSubtype],
-//            @"trackContentId": mediaTrack.contentIdentifier == nil ? @"" : mediaTrack.contentIdentifier,
-//            @"trackContentType": mediaTrack.contentType == nil ? @"" : mediaTrack.contentType,
-//            @"type": [MLPCastUtilities getTrackType:mediaTrack.type],
-//        };
-//        [tracks addObject:track];
-//    }
+
+    for (GCKMediaTrack* mediaTrack in mediaTracks) {
+        NSDictionary* track = @{
+            @"trackId": @(mediaTrack.identifier),
+            @"customData": mediaTrack.customData == nil? @{} : mediaTrack.customData,
+            @"language": mediaTrack.languageCode == nil? @"" : mediaTrack.languageCode,
+            @"name": mediaTrack.name == nil? @"" : mediaTrack.name,
+            @"subtype": [MLPCastUtilities getTextTrackSubtype:mediaTrack.textSubtype],
+            @"trackContentId": mediaTrack.contentIdentifier == nil ? @"" : mediaTrack.contentIdentifier,
+            @"trackContentType": mediaTrack.contentType == nil ? @"" : mediaTrack.contentType,
+            @"type": [MLPCastUtilities getTrackType:mediaTrack.type],
+        };
+        [tracks addObject:track];
+    }
     return tracks;
 }
 
@@ -701,7 +701,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
     if (textTrackStyle == nil) {
         return @{};
     }
-    
+
     NSMutableDictionary* textTrackStyleOut = [[NSMutableDictionary alloc] init];
     if (textTrackStyle.backgroundColor) {
         textTrackStyleOut[@"backgroundColor"] = textTrackStyle.backgroundColor.CSSString;
@@ -790,7 +790,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
         case GCKMediaTrackTypeVideo:
             return @"VIDEO";
         default:
-            return nil;
+            return @"UNKNOWN";
     }
 }
 
@@ -807,7 +807,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
         case GCKMediaTextTrackSubtypeSubtitles:
             return @"SUBTITLES";
         default:
-            return nil;
+            return @"UNKNOWN";
     }
 }
 
@@ -823,7 +823,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
             return @"INTERRUPTED";
         case GCKMediaPlayerIdleReasonNone:
         default:
-            return nil;
+            return @"UNKNOWN";
     }
 }
 
@@ -954,7 +954,7 @@ NSDictionary* queueOrderIDsByItemId = nil;
     if ([resumeState isEqualToString:@"PLAYBACK_START"]) {
         return GCKMediaResumeStatePlay;
     }
-    
+
     return GCKMediaResumeStateUnchanged;
 }
 
@@ -993,9 +993,9 @@ NSDictionary* queueOrderIDsByItemId = nil;
         callback(passed);
         return;
     }
-    
+
     remainTries--;
-    
+
     // check again in 1 second
     NSMethodSignature *signature  = [self methodSignatureForSelector:@selector(retry:forTries:callback:)];
     NSInvocation      *invocation = [NSInvocation invocationWithMethodSignature:signature];
