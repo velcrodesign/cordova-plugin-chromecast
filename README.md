@@ -3,14 +3,12 @@
 
 ---
 
-### NOTICE: This isn't really actively mainted, if you would like be the maintainer of **cordova-plugin-chromecast**, please fork and submit a PR to change this notice to point to your fork!
-
----
-
 # Installation
 
+> Use a commit hash to prevent dependency hijacking
+
 ```
-cordova plugin add https://github.com/jellyfin/cordova-plugin-chromecast.git
+cordova plugin add https://github.com/Videodock/cordova-plugin-chromecast.git#d82f07e26a53df6322043403e4dc98bb2eeb4e39
 ```
 
 If you have trouble installing the plugin or running the project for iOS, from `/platforms/ios/` try running:  
