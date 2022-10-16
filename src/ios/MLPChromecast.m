@@ -171,7 +171,7 @@ int scansRunning = 0;
 }
 
 - (void)requestSession:(CDVInvokedUrlCommand*) command {
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Cast to" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Transmitir para" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     GCKDiscoveryManager* discoveryManager = GCKCastContext.sharedInstance.discoveryManager;
     for (int i = 0; i < [discoveryManager deviceCount]; i++) {
         GCKDevice* device = [discoveryManager deviceAtIndex:i];
@@ -179,12 +179,12 @@ int scansRunning = 0;
             [self.currentSession joinDevice:device cdvCommand:command];
         }]];
     }
-    [alert addAction:[UIAlertAction actionWithTitle:@"Stop Casting" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alert addAction:[UIAlertAction actionWithTitle:@"Parar de transmitir" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.currentSession endSessionWithCallback:^{
             [self sendError:@"cancel" message:@"" command:command];
         } killSession:YES];
     }]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancelar" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [self.currentSession.remoteMediaClient stop];
         [self sendError:@"cancel" message:@"" command:command];
     }]];
